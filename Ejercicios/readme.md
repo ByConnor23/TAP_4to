@@ -18,3 +18,7 @@ ignorar
 ## Ejercicio 4
 
 Hacer uso de Contenedores y Layouts para la organizacion de los Widgets
+
+## Ejercicio 5
+
+Uso del Canvas y MauseListener
