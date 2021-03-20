@@ -14,3 +14,7 @@ introduciendo los números en el cuadro de texto de abajo y cuando se proporcion
 la palabra SUMAR, calcule la suma de todos los números que se hayan proporcionado
 y se encuentren en el Área de Texto. Si existen palabras en dicha área los debe
 ignorar
+
+## Ejercicio 4
+
+Hacer uso de Contenedores y Layouts para la organizacion de los Widgets
