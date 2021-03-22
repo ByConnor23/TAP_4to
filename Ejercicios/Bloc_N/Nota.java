@@ -11,8 +11,13 @@ import java.awt.TextArea;
 import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 
@@ -102,6 +107,7 @@ public class Nota extends Frame implements ActionListener{
         tamanio.addActionListener(this);
         comillas.addActionListener(this);
         open.addActionListener(this);
+        save.addActionListener(this);
         exit.addActionListener(this);
 
 
@@ -182,16 +188,19 @@ public class Nota extends Frame implements ActionListener{
             color.setSelectedIndex(0);
         }
         
+            
         if(arg0.getSource() == comillas){
-            if(txt_in.isCursorSet() == true){ 
+            if((txt_in.getText() != null) && (txt_in.getSelectedText() != "")){
                 String seleccionado = txt_in.getSelectedText();
                 String full = txt_in.getText();
                 
-                txt_in.setText(full.replace(seleccionado, "''"+seleccionado+"''"));
+                txt_in.setText(full.replace(seleccionado, "''"+seleccionado+"''"));        
             }else{
-                txt_out.append("No hay texto seleccionado");
+                txt_out.append("No hay texto seleccionado\n");
             }
         }
+        
+
         
         if(arg0.getSource() == tamanio){
             if(tamanio.getSelectedIndex() == 1){
@@ -224,9 +233,9 @@ public class Nota extends Frame implements ActionListener{
         }
 
         if(arg0.getSource() == open){
-            seleccionar = new JFileChooser(System.getProperty("user.dir"));
-                seleccionar.showOpenDialog(this);
-                file = seleccionar.getSelectedFile();
+            select_open = new JFileChooser(System.getProperty("user.dir"));
+                select_open.showOpenDialog(this);
+                file = select_open.getSelectedFile();
             try {
                 read = new BufferedReader(new FileReader(file));
                 line = read.readLine();
@@ -235,10 +244,29 @@ public class Nota extends Frame implements ActionListener{
                     line = read.readLine();
                 }
             } catch (Exception ex) {
-                //Logger.getLogger(Nota.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Nota.class.getName()).log(Level.SEVERE, null, ex);
             }
-            String name = file.getName();
+            name = file.getName();
             txt_out.append("Se abrio el archivo " +name+ "\n");
+        }
+        
+        if(arg0.getSource() == save){
+            select_save = new JFileChooser();
+            select_save.showSaveDialog(null);
+            select_save.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            file_save = select_save.getSelectedFile();
+            
+            try{
+                file_writer = new FileWriter(file_save+ ".txt", true);
+                buf_writer = new BufferedWriter(file_writer);
+                print_w = new PrintWriter(buf_writer);
+                print_w.print(txt_in.getText());
+                print_w.close();
+            }catch(Exception e){
+            //    
+            }
+            name = file.getName();
+            txt_out.append("Se guardo el archivo " +name+ "\n");
         }
 
         if(arg0.getSource() == exit){
@@ -264,8 +292,14 @@ public class Nota extends Frame implements ActionListener{
     JComboBox color;
     JComboBox tamanio;
     int cont = 14;
-    JFileChooser seleccionar;
-    File file; 
+    JFileChooser select_open;
+    JFileChooser select_save;
+    File file;
+    File file_save;
     BufferedReader read;
     String line;
+    String name;
+    FileWriter file_writer;
+    BufferedWriter buf_writer;
+    PrintWriter print_w;
 }
