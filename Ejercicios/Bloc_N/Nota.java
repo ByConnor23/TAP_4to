@@ -10,7 +10,11 @@ import java.awt.Label;
 import java.awt.TextArea;
 import java.awt.BorderLayout;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 
 public class Nota extends Frame implements ActionListener{
     
@@ -97,6 +101,7 @@ public class Nota extends Frame implements ActionListener{
         color.addActionListener(this);
         tamanio.addActionListener(this);
         comillas.addActionListener(this);
+        open.addActionListener(this);
         exit.addActionListener(this);
 
 
@@ -178,7 +183,7 @@ public class Nota extends Frame implements ActionListener{
         }
         
         if(arg0.getSource() == comillas){
-            if(txt_in.isCursorSet() == true){
+            if(txt_in.isCursorSet() == true){ 
                 String seleccionado = txt_in.getSelectedText();
                 String full = txt_in.getText();
                 
@@ -210,12 +215,30 @@ public class Nota extends Frame implements ActionListener{
             
             if(tamanio.getSelectedIndex() != 0){
                 if(tamanio.getSelectedIndex() == 1){
-                    txt_out.append("Se agrando la fuente" );
+                    txt_out.append("Se agrando la fuente\n" );
                 }else{
-                    txt_out.append("Se disminuyo la fuente");
+                    txt_out.append("Se disminuyo la fuente\n");
                 }
             }
             tamanio.setSelectedIndex(0);
+        }
+
+        if(arg0.getSource() == open){
+            seleccionar = new JFileChooser(System.getProperty("user.dir"));
+                seleccionar.showOpenDialog(this);
+                file = seleccionar.getSelectedFile();
+            try {
+                read = new BufferedReader(new FileReader(file));
+                line = read.readLine();
+                while(line != null){
+                    txt_in.append(line + "\n");
+                    line = read.readLine();
+                }
+            } catch (Exception ex) {
+                //Logger.getLogger(Nota.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            String name = file.getName();
+            txt_out.append("Se abrio el archivo " +name+ "\n");
         }
 
         if(arg0.getSource() == exit){
@@ -231,7 +254,6 @@ public class Nota extends Frame implements ActionListener{
     TextArea txt_out;
     Label espacio;
     Button comillas;
-    //Button tamanio;
     Button save;
     Button open;
     Button exit;
@@ -239,10 +261,11 @@ public class Nota extends Frame implements ActionListener{
     Panel p_central;
     Panel p_inferior;
     String cambiar_c;
-    //Nota colores;
     JComboBox color;
     JComboBox tamanio;
     int cont = 14;
-    //Window abrir; 
-    //Color co;   
+    JFileChooser seleccionar;
+    File file; 
+    BufferedReader read;
+    String line;
 }
