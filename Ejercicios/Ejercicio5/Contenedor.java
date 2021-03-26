@@ -61,5 +61,6 @@ public class Contenedor extends Canvas{
 
     public void setClicked() {
         this.isClicked = !this.isClicked;
-    }    
+    }
+   
 }
